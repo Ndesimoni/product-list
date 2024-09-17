@@ -7,6 +7,7 @@ const AppStyle = styled.div`
   display: flex;
   justify-content: center;
 `;
+
 const App = () => {
   const queryClient = new QueryClient({
     defaultOptions: {

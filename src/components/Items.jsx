@@ -1,64 +1,96 @@
-import styled from "styled-components";
 import { MdAddShoppingCart } from "react-icons/md";
+import { useState } from "react";
+import PropTypes from "prop-types";
+import { IoMdAddCircle } from "react-icons/io";
+import { AiFillMinusCircle } from "react-icons/ai";
+import {
+  AddToCardStyle,
+  Image,
+  ItemStyles,
+} from "../ui/StylesComponents/ItemStyles";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { createCustomersOrder } from "../utils/DATA-BASE/DATA-BASE-api";
 
-const ItemStyles = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 1px 1px;
-  position: relative;
-`;
-const Image = styled.img`
-  width: 229px;
-  height: inherit;
-  border-radius: 11px;
-`;
+const Items = ({ dissert }) => {
+  const [isActive, setIszActive] = useState(false);
+  const queryClient = useQueryClient();
+  const { image, category, name, price, id } = dissert;
 
-const AddToCardStyle = styled.div`
-  position: absolute;
-  border: 1px solid var(--Red);
-  background-color: var(--Rose-20);
-  width: 6rem;
-  right: 0;
-  left: 0;
-  margin-right: auto;
-  margin-left: auto;
-  bottom: -7%;
-  border-radius: 40px;
-  font-size: x-small;
-  font-weight: bold;
-  padding: 5px 0px;
-`;
+  //todo this is for creating new orders
+  const { data = [], mutate } = useMutation({
+    mutationFn: createCustomersOrder,
+    onSuccess: () => {
+      alert("successfully created order");
 
-const Items = ({ dessert }) => {
-  // // const { id, image, category, name, price } = deserts;
+      queryClient.invalidateQueries({
+        queryKey: ["Customers-Order"],
+      });
+    },
+
+    onError: (error) => {
+      throw new Error(error.message);
+    },
+  });
+
+  function handleCreateOrder() {
+    mutate(dissert);
+    console.log("created order");
+  }
 
   return (
     <div>
       <ItemStyles>
-        {/* <Image src={image} alt="" /> */}
-        <Image src="./images/image-brownie-desktop.jpg" alt="" />
+        <Image type={`${isActive && "active"}`} src={image} alt="" />
 
-        <AddToCardStyle>
-          <div className="flex flex-row justify-center items-center gap-1 font-light">
-            <p>
-              <MdAddShoppingCart size="15px" color="var(--Red)" />
-            </p>
-            <p className="text-[var(--Rose-900)]">Add to Card</p>
-          </div>
-        </AddToCardStyle>
+        {!isActive && (
+          <AddToCardStyle
+            type="addToCart"
+            role="button"
+            onClick={() => setIszActive(true)}
+          >
+            <div
+              onClick={handleCreateOrder}
+              className="flex flex-row justify-center items-center gap-1 font-light"
+            >
+              <p>
+                <MdAddShoppingCart size="15px" color="var(--Red)" />
+              </p>
+              <p className="text-[var(--Rose-900)]"> Add To Cart </p>
+            </div>
+          </AddToCardStyle>
+        )}
+
+        {isActive && (
+          <AddToCardStyle type="cartAmount" role="button">
+            <div className="flex flex-row justify-center items-center gap-3 font-light ">
+              <p>
+                <IoMdAddCircle size="13px" color="var(--Rose-50)" />
+              </p>
+              <p className="text-[var(--Rose-50)] ">{0}</p>
+
+              <p>
+                <AiFillMinusCircle size="13px" color="var(--Rose-50)" />
+              </p>
+            </div>
+          </AddToCardStyle>
+        )}
       </ItemStyles>
 
       <div className="flex flex-col items-start justify-center mt-8 mb-2 text-xs capitalize">
         <p className="text-[var(--Rose-400)] font-mono tracking-tighter">
-          berry
+          {category}
         </p>
         <h4 className="text-[var(--Rose-900)] tracking-tighter font-mono">
-          love this desert bad
+          {name}
         </h4>
-        <p className="text-[var(--Red)]">$7.50</p>
+        <p className="text-[var(--Red)]">${price}</p>
       </div>
     </div>
   );
+};
+
+Items.propTypes = {
+  dissert: PropTypes.any,
 };
 
 export default Items;

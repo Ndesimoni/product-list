@@ -1,26 +1,5 @@
 import { FaRegFaceKissWinkHeart } from "react-icons/fa6";
-
-import styled from "styled-components";
-
-const Main = styled.main`
-  width: 420px;
-  position: absolute;
-  margin-left: auto;
-  margin-right: auto;
-  left: 0;
-  right: 0;
-  top: 22%;
-  text-align: center;
-`;
-
-const Item = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid #cccc;
-
-  padding: 15px 0px;
-`;
+import { Item, Main } from "../ui/StylesComponents/OrderListStyle";
 
 const OrderConfirm = () => {
   return (
@@ -61,9 +40,6 @@ const OrderConfirm = () => {
             <p className="text-[var(--Rose-900)] text-xs font-light ">
               Order Total
             </p>
-            {/* <div>
-              <p>Order Total</p>
-            </div> */}
 
             <p className="font-bold text-base text-[var(--Rose-(900)]">
               $46.50
