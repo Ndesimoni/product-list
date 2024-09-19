@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 export const Item = styled.div`
   display: flex;
@@ -12,4 +12,15 @@ export const Item = styled.div`
 
 export const Main = styled.main`
   width: 350px;
+  ${(props) =>
+    props.type !== "list" &&
+    css`
+      width: 400px;
+      position: absolute;
+      left: 0;
+      right: 0;
+      margin-left: auto;
+      margin-right: auto;
+      top: 30%;
+    `}
 `;

@@ -1,27 +1,15 @@
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { Item } from "../ui/StylesComponents/OrderListStyle";
 import PropTypes from "prop-types";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { delateCustomersOrders } from "../utils/DATA-BASE/DATA-BASE-api";
+import useDeleteOrders from "../utils/customeHooks/useDeleteOrders";
+// import useGetQuery from "../utils/customeHooks/useGetQuery";
 
 const Orders = ({ ordersContain }) => {
+  //   const { isDeleting } = useGetQuery();
+  const { mutate } = useDeleteOrders();
   const { name, quantity, price, id } = ordersContain;
-  const queryClient = useQueryClient();
+  //   console.log(id);
 
-  //todo delete customers orders
-  const { mutate } = useMutation({
-    mutationFn: delateCustomersOrders,
-    onSuccess: () => {
-      alert("deleted one item"),
-        queryClient.invalidateQueries({
-          queryKey: ["Customers-Order"],
-        });
-    },
-
-    onError: (error) => {
-      alert(error.message);
-    },
-  });
   return (
     <div className=" rounded px-3   ">
       <Item>
@@ -30,11 +18,11 @@ const Orders = ({ ordersContain }) => {
           <div className="text-sx flex flex-row gap-3">
             <p className="text-[var(--Red)]">{quantity}x</p>
             <p className="text-[var(--Rose-400)]">@ ${price}</p>
-            <p className="text-[var(--Rose-500)]">$5.50</p>
+            <p className="text-green-600">${quantity * price}</p>
           </div>
         </div>
 
-        <div>
+        <div disabled>
           <IoIosCloseCircleOutline
             onClick={() => mutate(id)}
             size="20px"
@@ -51,3 +39,4 @@ Orders.propTypes = {
 };
 
 export default Orders;
+// console.log(isDeleting === "fetching" ? true : false);

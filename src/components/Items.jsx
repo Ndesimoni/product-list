@@ -8,33 +8,45 @@ import {
   Image,
   ItemStyles,
 } from "../ui/StylesComponents/ItemStyles";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createCustomersOrder } from "../utils/DATA-BASE/DATA-BASE-api";
+import useCardQuantity from "../utils/customeHooks/useCardQuantity";
+import useCreateNewOrder from "../utils/customeHooks/useCreateNewOrder";
+import useGetQuery from "../utils/customeHooks/useGetQuery";
 
 const Items = ({ dissert }) => {
   const [isActive, setIszActive] = useState(false);
-  const queryClient = useQueryClient();
-  const { image, category, name, price, id } = dissert;
+  const { customersOrders } = useGetQuery();
+  const { itemQuantity, setItemQuantity, updateQuantity } = useCardQuantity();
+  const { mutate } = useCreateNewOrder();
 
-  //todo this is for creating new orders
-  const { data = [], mutate } = useMutation({
-    mutationFn: createCustomersOrder,
-    onSuccess: () => {
-      alert("successfully created order");
+  const { image, category, name, price } = dissert;
+  let currentDeleteId = null;
 
-      queryClient.invalidateQueries({
-        queryKey: ["Customers-Order"],
-      });
-    },
+  for (let i = 0; i < customersOrders.length; i++) {
+    currentDeleteId = currentDeleteId = customersOrders[i].id;
+  }
 
-    onError: (error) => {
-      throw new Error(error.message);
-    },
-  });
+  console.log(currentDeleteId);
 
+  //todo: create new  ordered
   function handleCreateOrder() {
+    setIszActive(dissert.id);
+
     mutate(dissert);
-    console.log("created order");
+    console.log(dissert.id);
+  }
+
+  //todo set the amount ordered
+  function handleItemQuantityMinus() {
+    if (itemQuantity <= 0) return;
+    setItemQuantity((item) => item - 1);
+    const newQuantity = { ...dissert, quantity: itemQuantity - 1 };
+    updateQuantity(newQuantity);
+  }
+
+  function handleItemQuantityAdd() {
+    setItemQuantity((item) => item + 1);
+    const newQuantity = { ...dissert, quantity: itemQuantity + 1 };
+    updateQuantity(newQuantity);
   }
 
   return (
@@ -43,11 +55,7 @@ const Items = ({ dissert }) => {
         <Image type={`${isActive && "active"}`} src={image} alt="" />
 
         {!isActive && (
-          <AddToCardStyle
-            type="addToCart"
-            role="button"
-            onClick={() => setIszActive(true)}
-          >
+          <AddToCardStyle type="addToCart" role="button">
             <div
               onClick={handleCreateOrder}
               className="flex flex-row justify-center items-center gap-1 font-light"
@@ -60,17 +68,22 @@ const Items = ({ dissert }) => {
           </AddToCardStyle>
         )}
 
+        {/* //todo this handles cart quantity */}
         {isActive && (
           <AddToCardStyle type="cartAmount" role="button">
             <div className="flex flex-row justify-center items-center gap-3 font-light ">
-              <p>
-                <IoMdAddCircle size="13px" color="var(--Rose-50)" />
-              </p>
-              <p className="text-[var(--Rose-50)] ">{0}</p>
+              <AiFillMinusCircle
+                size="13px"
+                color="var(--Rose-50)"
+                onClick={handleItemQuantityMinus}
+              />
+              <p className="text-[var(--Rose-50)] ">{itemQuantity}</p>
 
-              <p>
-                <AiFillMinusCircle size="13px" color="var(--Rose-50)" />
-              </p>
+              <IoMdAddCircle
+                size="13px"
+                color="var(--Rose-50)"
+                onClick={handleItemQuantityAdd}
+              />
             </div>
           </AddToCardStyle>
         )}
