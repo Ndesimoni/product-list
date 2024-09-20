@@ -19,25 +19,24 @@ const Items = ({ dissert }) => {
 
   const { image, category, name, price, id } = dissert;
 
-  let currentDeleteId;
-  for (let i = 0; i < customersOrders.length; i++) {
-    currentDeleteId = currentDeleteId = customersOrders[i].id;
-  }
-  const isActive = currentDeleteId === id;
-
+  /////////////////////////////////////////////////////////////
+  // keep this hear for reference
+  // let currentDeleteId;
+  // for (let i = 0; i < customersOrders.length; i++) {
+  //   currentDeleteId = currentDeleteId = customersOrders[i].id;
+  // }
+  // const isActive1 = currentDeleteId === id;
   ///////////////////////////////////////////////////
 
-  const current = customersOrders
+  const isActive = customersOrders
+    .filter((itemsId) => {
+      return itemsId.id == id;
+    })
     .map((ell) => {
       return ell.id;
     })
-    .filter((itemsId) => {
-      return itemsId === id;
-    });
+    .includes(id);
 
-  console.log(current);
-
-  /////////////////////////////////////////////////////////////
   //todo: create new  ordered
   function handleCreateOrder() {
     mutate(dissert);
