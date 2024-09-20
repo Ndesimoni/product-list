@@ -1,5 +1,4 @@
 import { MdAddShoppingCart } from "react-icons/md";
-import { useState } from "react";
 import PropTypes from "prop-types";
 import { IoMdAddCircle } from "react-icons/io";
 import { AiFillMinusCircle } from "react-icons/ai";
@@ -13,26 +12,35 @@ import useCreateNewOrder from "../utils/customeHooks/useCreateNewOrder";
 import useGetQuery from "../utils/customeHooks/useGetQuery";
 
 const Items = ({ dissert }) => {
-  const [isActive, setIszActive] = useState(false);
   const { customersOrders } = useGetQuery();
+
   const { itemQuantity, setItemQuantity, updateQuantity } = useCardQuantity();
   const { mutate } = useCreateNewOrder();
 
-  const { image, category, name, price } = dissert;
-  let currentDeleteId = null;
+  const { image, category, name, price, id } = dissert;
 
+  let currentDeleteId;
   for (let i = 0; i < customersOrders.length; i++) {
     currentDeleteId = currentDeleteId = customersOrders[i].id;
   }
+  const isActive = currentDeleteId === id;
 
-  console.log(currentDeleteId);
+  ///////////////////////////////////////////////////
 
+  const current = customersOrders
+    .map((ell) => {
+      return ell.id;
+    })
+    .filter((itemsId) => {
+      return itemsId === id;
+    });
+
+  console.log(current);
+
+  /////////////////////////////////////////////////////////////
   //todo: create new  ordered
   function handleCreateOrder() {
-    setIszActive(dissert.id);
-
     mutate(dissert);
-    console.log(dissert.id);
   }
 
   //todo set the amount ordered
@@ -107,3 +115,11 @@ Items.propTypes = {
 };
 
 export default Items;
+
+// for (let i = 0; i < customersOrders.length; i++) {
+//   currentActiveItems.push(customersOrders[i].id);
+//   for (let j = 0; j < desserts.length; j++) {
+//     activeItems = activeItems = desserts[j];
+//   }
+// }
+// console.log(currentActiveItems.includes(id));

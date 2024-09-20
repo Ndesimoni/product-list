@@ -8,7 +8,7 @@ const Orders = ({ ordersContain }) => {
   //   const { isDeleting } = useGetQuery();
   const { mutate } = useDeleteOrders();
   const { name, quantity, price, id } = ordersContain;
-  //   console.log(id);
+  //
 
   return (
     <div className=" rounded px-3   ">
