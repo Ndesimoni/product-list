@@ -3,12 +3,16 @@ import { Main } from "../ui/StylesComponents/OrderListStyle";
 import PropTypes from "prop-types";
 import Orders from "./Orders";
 import OrderListDefault from "./OrderListDefault";
+import { createContext } from "react";
+import useGetQuery from "../utils/customeHooks/useGetQuery";
 
-const OrderList = ({ customersOrders, setShowOrders }) => {
+const OrderListContext = createContext();
+
+const OrderList = ({ setShowOrders }) => {
+  const { customersOrders } = useGetQuery();
   if (customersOrders.length < 0) return <OrderListDefault />;
 
   let totalPrice = 0;
-
   if (customersOrders.length > 0) {
     for (let i = 0; i < customersOrders.length; i++) {
       totalPrice = totalPrice +=
@@ -21,8 +25,8 @@ const OrderList = ({ customersOrders, setShowOrders }) => {
   };
 
   return (
-    <Main type="list">
-      {customersOrders.length > 0 ? (
+    <OrderListContext.Provider value={{ customersOrders }}>
+      <Main type="list">
         <div className="bg-[var(--Rose-20)] rounded-md p-5 border">
           <div className=" flex flex-col justify-start items-start ">
             <h2 className=" mb-3 font-bold text-[var(--Red)] font-serif">
@@ -65,14 +69,23 @@ const OrderList = ({ customersOrders, setShowOrders }) => {
             Confirm Order
           </div>
         </div>
-      ) : (
-        <div>
-          <img src="image/illustration-empty-cart.svg" />
-        </div>
-      )}
-    </Main>
+      </Main>
+    </OrderListContext.Provider>
   );
 };
+
+// const CustomersOrders = () => {
+//   const { customersOrders } = useContext(OrderListContext);
+//   return (
+//     <>
+//       {customersOrders.map((orders) => (
+//         <Orders key={orders.id} ordersContain={orders} />
+//       ))}
+//     </>
+//   );
+// };
+
+// OrderList.CustomersOrders = CustomersOrders;
 
 OrderList.propTypes = {
   customersOrders: PropTypes.any,

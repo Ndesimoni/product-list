@@ -1,18 +1,19 @@
 import { FaRegFaceKissWinkHeart } from "react-icons/fa6";
 import { Item, Main } from "../ui/StylesComponents/OrderListStyle";
 import PropTypes from "prop-types";
+import useGetQuery from "../utils/customeHooks/useGetQuery";
 // import UseDeleteAllCustomersOrders from "../utils/customeHooks/UseDeleteAllCustomersOrders";
 
-const OrderConfirm = ({ customersOrders, setShowOrders }) => {
-  const toggle = customersOrders.length >= 1;
+const OrderConfirm = ({ setShowOrders }) => {
+  const { customersOrders } = useGetQuery();
 
+  const toggle = customersOrders.length >= 1;
   let totalPrice = 0;
 
   if (customersOrders.length > 0) {
     for (let i = 0; i < customersOrders.length; i++) {
       totalPrice = totalPrice +=
         customersOrders[i].quantity * customersOrders[i].price;
-      console.log(totalPrice);
     }
   }
 

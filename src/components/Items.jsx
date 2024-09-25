@@ -13,9 +13,8 @@ import useGetQuery from "../utils/customeHooks/useGetQuery";
 
 const Items = ({ dissert }) => {
   const { customersOrders } = useGetQuery();
-
-  const { itemQuantity, setItemQuantity, updateQuantity } = useCardQuantity();
   const { mutate } = useCreateNewOrder();
+  const { itemQuantity, setItemQuantity, updateQuantity } = useCardQuantity();
 
   const { image, category, name, price, id } = dissert;
 
@@ -52,6 +51,7 @@ const Items = ({ dissert }) => {
 
   function handleItemQuantityAdd() {
     setItemQuantity((item) => item + 1);
+
     const newQuantity = { ...dissert, quantity: itemQuantity + 1 };
     updateQuantity(newQuantity);
   }
@@ -114,11 +114,3 @@ Items.propTypes = {
 };
 
 export default Items;
-
-// for (let i = 0; i < customersOrders.length; i++) {
-//   currentActiveItems.push(customersOrders[i].id);
-//   for (let j = 0; j < desserts.length; j++) {
-//     activeItems = activeItems = desserts[j];
-//   }
-// }
-// console.log(currentActiveItems.includes(id));

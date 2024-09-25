@@ -2,13 +2,10 @@ import { IoIosCloseCircleOutline } from "react-icons/io";
 import { Item } from "../ui/StylesComponents/OrderListStyle";
 import PropTypes from "prop-types";
 import useDeleteOrders from "../utils/customeHooks/useDeleteOrders";
-// import useGetQuery from "../utils/customeHooks/useGetQuery";
 
 const Orders = ({ ordersContain }) => {
-  //   const { isDeleting } = useGetQuery();
   const { mutate } = useDeleteOrders();
   const { name, quantity, price, id } = ordersContain;
-  //
 
   return (
     <div className=" rounded px-3   ">
@@ -39,4 +36,3 @@ Orders.propTypes = {
 };
 
 export default Orders;
-// console.log(isDeleting === "fetching" ? true : false);
